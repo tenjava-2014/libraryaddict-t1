@@ -1,0 +1,3 @@
+name: libraryaddict-t1
+main: com.tenjava.entries.libraryaddict.t1.TenJava
+version: '${project.version}'
