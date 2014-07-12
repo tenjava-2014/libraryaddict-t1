@@ -1,4 +1,4 @@
-name: libraryaddict-t1
+name: RuneMaster
 main: com.tenjava.entries.libraryaddict.t1.RuneMaster
 version: '${project.version}'
 commands:
