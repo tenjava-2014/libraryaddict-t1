@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.tenjava.entries.libraryaddict.t1.Rune;
 import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
@@ -36,8 +37,8 @@ public class TeleportRune implements Rune {
                     resendRunes();
                 }
                 if (ticksLived % 40 == 0 && ticksLived < 150) {
-                    firstLoc.getWorld().playSound(firstLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
-                    firstLoc.getWorld().playSound(secondLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
+                    firstLoc.getWorld().playSound(firstLoc, Sound.PORTAL, (float) Math.min(3, runeSize), 0F);
+                    firstLoc.getWorld().playSound(secondLoc, Sound.PORTAL, (float) Math.min(3, runeSize), 0F);
                 }
                 if (ticksLived > 0) {
                     for (LivingEntity entity : firstLoc.getWorld().getEntitiesByClass(LivingEntity.class)) {

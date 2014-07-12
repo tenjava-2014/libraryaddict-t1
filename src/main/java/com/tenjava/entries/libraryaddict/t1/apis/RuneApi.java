@@ -16,6 +16,10 @@ public class RuneApi {
         return plugin;
     }
 
+    public static void castExploding(Location loc, double size) {
+        ExplodingRune rune = new ExplodingRune(loc, size);
+    }
+
     public static void castTeleport(Location firstTeleport, Location secondTeleport, double runeSize) {
         TeleportRune rune = new TeleportRune(firstTeleport, secondTeleport, runeSize);
     }

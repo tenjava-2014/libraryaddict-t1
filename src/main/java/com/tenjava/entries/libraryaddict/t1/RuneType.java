@@ -8,10 +8,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public enum RuneType {
-    TELEPORT(ChatColor.BLUE + "Teleporter Rune", new ItemStack(Material.COMMAND), "Create two teleport portals!"), TRAP(ChatColor.GRAY
-            + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!"), DEFENSE(
-            ChatColor.WHITE + "Defense Rune", new ItemStack(Material.IRON_CHESTPLATE),
-            "Cast a spell which defends the players inside!");
+    TELEPORT(ChatColor.BLUE + "Teleporter Rune", new ItemStack(Material.COMMAND), "Create two teleport portals!"),
+
+    TRAP(ChatColor.GRAY + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!"),
+
+    DEFENSE(ChatColor.WHITE + "Defense Rune", new ItemStack(Material.IRON_CHESTPLATE),
+            "Cast a spell which defends the players inside!"),
+
+    EXPLODING(ChatColor.RED + "Exploding Rune", new ItemStack(Material.FIREBALL), "Cast a rune which explodes after 5 seconds!");
 
     private String runeName;
     private ItemStack runeIcon;

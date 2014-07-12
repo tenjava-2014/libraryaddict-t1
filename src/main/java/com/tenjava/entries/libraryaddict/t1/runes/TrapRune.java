@@ -11,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.tenjava.entries.libraryaddict.t1.Rune;
 import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
@@ -43,7 +44,7 @@ public class TrapRune implements Rune, Listener {
                         HandlerList.unregisterAll(TrapRune.this);
                         trapCard();
                         loc.getWorld().playSound(loc, Sound.WITHER_SHOOT, 5, 1.5F);
-                        loc.getWorld().createExplosion(loc, 2F);
+                        loc.getWorld().createExplosion(loc.add(0, 0.5, 0), 2F);
                         break;
                     }
                 }

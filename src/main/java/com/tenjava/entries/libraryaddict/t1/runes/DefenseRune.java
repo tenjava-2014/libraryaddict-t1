@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.tenjava.entries.libraryaddict.t1.Rune;
 import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;

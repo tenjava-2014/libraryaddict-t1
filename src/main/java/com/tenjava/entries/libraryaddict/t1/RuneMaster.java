@@ -98,6 +98,7 @@ public class RuneMaster extends JavaPlugin implements Listener {
                             switch (type) {
                             case TRAP:
                             case TELEPORT:
+                            case EXPLODING:
                                 Block b = p.getTargetBlock(null, type == RuneType.TRAP ? 10 : 150);
                                 while (b.getType() != Material.AIR) {
                                     b = b.getRelative(BlockFace.UP);
@@ -115,6 +116,9 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                     break;
                                 case TELEPORT:
                                     RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+                                    break;
+                                case EXPLODING:
+                                    RuneApi.castExploding(secondTeleport, 3);
                                     break;
                                 default:
                                     break;
