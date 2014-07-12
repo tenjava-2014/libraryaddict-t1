@@ -15,17 +15,8 @@ import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
 public class HealingRune implements Rune {
 
     private Location location;
-    private double size;
     private BukkitRunnable runnable;
-
-    public void sendParticles() {
-        for (int y = 0; y < 3; y++) {
-            for (Location loc : ShapesApi.getPointsCircle(location.clone().add(0, y, 0), (int) Math.ceil(Math.PI * size * 2),
-                    size)) {
-                ParticleApi.sendPackets(LibsParticles.HEART, loc.getX(), loc.getY(), loc.getZ());
-            }
-        }
-    }
+    private double size;
 
     public HealingRune(Location loc, double rSize) {
         this.location = loc;
@@ -63,6 +54,15 @@ public class HealingRune implements Rune {
     @Override
     public RuneType getType() {
         return RuneType.HEALING;
+    }
+
+    public void sendParticles() {
+        for (int y = 0; y < 3; y++) {
+            for (Location loc : ShapesApi.getPointsCircle(location.clone().add(0, y, 0), (int) Math.ceil(Math.PI * size * 2),
+                    size)) {
+                ParticleApi.sendPackets(LibsParticles.HEART, loc.getX(), loc.getY(), loc.getZ());
+            }
+        }
     }
 
 }

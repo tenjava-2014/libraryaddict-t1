@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 
 public class ParticleApi {
     public enum LibsParticles {
-        FLAME("flame"), BUBBLE("bubble"), FIREWORKS("fireworksSpark"), PORTAL("portal"), HUGE_EXPLOSION("hugeexplosion"), LAVA(
-                "lava"), RED_DUST("reddust"), WATER("dripWater"), HEART("heart");
+        BUBBLE("bubble"), FIREWORKS("fireworksSpark"), FLAME("flame"), HEART("heart"), HUGE_EXPLOSION("hugeexplosion"), LAVA(
+                "lava"), PORTAL("portal"), RED_DUST("reddust"), WATER_DRIP("dripWater"), LAVA_DRIP("dripLava");
         private String name;
 
         private LibsParticles(String name) {

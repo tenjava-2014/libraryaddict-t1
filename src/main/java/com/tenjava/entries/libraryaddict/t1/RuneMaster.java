@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -28,21 +28,6 @@ public class RuneMaster extends JavaPlugin implements Listener {
 
     private Inventory spellInv = Bukkit.createInventory(null, (int) (Math.ceil((double) RuneType.values().length / 9)) * 9,
             ChatColor.GOLD + "Rune selector");
-
-    public void onEnable() {
-        saveDefaultConfig();
-        for (RuneType type : RuneType.values()) {
-            type.setCost(getConfig().getInt("RuneCosts." + type.name().substring(0, 1) + type.name().toLowerCase().substring(1)));
-        }
-        Bukkit.getPluginManager().registerEvents(this, this);
-        RuneApi.init(this);
-        int i = 0;
-        for (RuneType type : RuneType.values()) {
-            ItemStack item = type.getIcon();
-            spellInv.setItem(i++, item);
-        }
-        getCommand("addwand").setExecutor(new AddWandCommand());
-    }
 
     private boolean charge(Player player, RuneType type) {
         if (player.getGameMode() == GameMode.CREATIVE) {
@@ -71,6 +56,16 @@ public class RuneMaster extends JavaPlugin implements Listener {
         }
         player.updateInventory();
         return true;
+    }
+
+    private boolean isWand(ItemStack item) {
+        if (item != null && item.getType() == Material.BLAZE_ROD) {
+            String displayName = item.getItemMeta().getDisplayName();
+            if (displayName != null && displayName.startsWith(ChatColor.GOLD + "The wand of ages")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @EventHandler
@@ -106,14 +101,19 @@ public class RuneMaster extends JavaPlugin implements Listener {
         }
     }
 
-    private boolean isWand(ItemStack item) {
-        if (item != null && item.getType() == Material.BLAZE_ROD) {
-            String displayName = item.getItemMeta().getDisplayName();
-            if (displayName != null && displayName.startsWith(ChatColor.GOLD + "The wand of ages")) {
-                return true;
-            }
+    public void onEnable() {
+        saveDefaultConfig();
+        for (RuneType type : RuneType.values()) {
+            type.setCost(getConfig().getInt("RuneCosts." + type.name().substring(0, 1) + type.name().toLowerCase().substring(1)));
         }
-        return false;
+        Bukkit.getPluginManager().registerEvents(this, this);
+        RuneApi.init(this);
+        int i = 0;
+        for (RuneType type : RuneType.values()) {
+            ItemStack item = type.getIcon();
+            spellInv.setItem(i++, item);
+        }
+        getCommand("addwand").setExecutor(new AddWandCommand());
     }
 
     @EventHandler
@@ -135,6 +135,7 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                 case TELEPORT:
                                 case EXPLODING:
                                 case HEALING:
+                                case WITHER_SUMMONING:
                                     Block b = p
                                             .getTargetBlock(null, type == RuneType.TRAP || type == RuneType.HEALING ? 10 : 150);
                                     while (b.getType() != Material.AIR) {
@@ -148,6 +149,9 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                     Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
                                     double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
                                     switch (type) {
+                                    case WITHER_SUMMONING:
+                                        RuneApi.castSummoning(secondTeleport, 10);
+                                        break;
                                     case TRAP:
                                         RuneApi.castTrap(secondTeleport, 2);
                                         break;

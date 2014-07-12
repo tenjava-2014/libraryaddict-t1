@@ -1,25 +1,23 @@
 package com.tenjava.entries.libraryaddict.t1.runes;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.tenjava.entries.libraryaddict.t1.Rune;
 import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
+import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
 import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
-import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 
 public class TeleportRune implements Rune {
     private Location firstLoc, secondLoc;
     private double runeSize;
+    private BukkitRunnable runnable;
     private int ticksLived = -60;
     private int ticksToLive;
-    private BukkitRunnable runnable;
 
     public TeleportRune(Location fLoc, Location sLoc, double rSize) {
         this.firstLoc = fLoc;
@@ -65,12 +63,9 @@ public class TeleportRune implements Rune {
         runnable.runTaskTimer(RuneApi.getPlugin(), 0, 1);
     }
 
-    /**
-     * Resending runes resends the particles.
-     */
-    public void resendRunes() {
-        redrawRunes(firstLoc);
-        redrawRunes(secondLoc);
+    @Override
+    public RuneType getType() {
+        return RuneType.TELEPORT;
     }
 
     private void makeCircle(Location loc, double distance) {
@@ -93,9 +88,12 @@ public class TeleportRune implements Rune {
         }
     }
 
-    @Override
-    public RuneType getType() {
-        return RuneType.TELEPORT;
+    /**
+     * Resending runes resends the particles.
+     */
+    public void resendRunes() {
+        redrawRunes(firstLoc);
+        redrawRunes(secondLoc);
     }
 
 }

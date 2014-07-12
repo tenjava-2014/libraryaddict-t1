@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -14,14 +13,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.tenjava.entries.libraryaddict.t1.Rune;
 import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
+import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
 import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
-import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 
 public class TrapRune implements Rune, Listener {
+    private BukkitRunnable runnable;
     private Location trapLocation;
     private double trapSize;
-    private BukkitRunnable runnable;
 
     public TrapRune(Location loc, double size) {
         Bukkit.getPluginManager().registerEvents(this, RuneApi.getPlugin());
@@ -53,17 +52,6 @@ public class TrapRune implements Rune, Listener {
         runnable.runTaskTimer(RuneApi.getPlugin(), 0, 1);
     }
 
-    private boolean isInTrap(Location loc) {
-        if (loc.getX() >= trapLocation.getX() - trapSize && loc.getX() <= trapLocation.getX() + trapSize) {
-            if (loc.getZ() >= trapLocation.getZ() - trapSize && loc.getZ() <= trapLocation.getZ() + trapSize) {
-                if (loc.getY() >= trapLocation.getY() - 0.1 && loc.getY() <= trapLocation.getY() + 0.9) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public ArrayList<Location> getBox() {
         ArrayList<Location> boxLocs = ShapesApi.getBox(trapLocation, trapSize);
         ArrayList<Location> returns = new ArrayList<Location>();
@@ -75,6 +63,11 @@ public class TrapRune implements Rune, Listener {
         return returns;
     }
 
+    @Override
+    public RuneType getType() {
+        return RuneType.TRAP;
+    }
+
     public void initialParticles() {
         for (Location loc : getBox()) {
             for (double y = 0; y < 1; y += 0.2) {
@@ -83,16 +76,22 @@ public class TrapRune implements Rune, Listener {
         }
     }
 
+    private boolean isInTrap(Location loc) {
+        if (loc.getX() >= trapLocation.getX() - trapSize && loc.getX() <= trapLocation.getX() + trapSize) {
+            if (loc.getZ() >= trapLocation.getZ() - trapSize && loc.getZ() <= trapLocation.getZ() + trapSize) {
+                if (loc.getY() >= trapLocation.getY() - 0.1 && loc.getY() <= trapLocation.getY() + 0.9) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void trapCard() {
         for (Location loc : getBox()) {
             for (double y = 0; y < 1; y += 0.2) {
                 ParticleApi.sendPackets(LibsParticles.FLAME, loc.getX(), loc.getY() + y, loc.getZ());
             }
         }
-    }
-
-    @Override
-    public RuneType getType() {
-        return RuneType.TRAP;
     }
 }
