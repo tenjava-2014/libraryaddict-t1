@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -93,6 +94,7 @@ public class RuneMaster extends JavaPlugin implements Listener {
                     if (lore != null && !lore.isEmpty()) {
                         RuneType type = RuneType.getRune(lore.get(0));
                         if (type != null) {
+                            boolean cast = true;
                             switch (type) {
                             case TRAP:
                             case TELEPORT:
@@ -122,7 +124,11 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                 RuneApi.castDefense(p.getLocation());
                                 break;
                             default:
+                                cast = false;
                                 break;
+                            }
+                            if (cast) {
+                                p.getWorld().playSound(p.getLocation(), Sound.ZOMBIE_REMEDY, 3, 0.8F);
                             }
                         } else {
                             p.sendMessage(ChatColor.RED + "You don't have a spell selected!");
