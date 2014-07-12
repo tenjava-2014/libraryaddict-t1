@@ -23,9 +23,9 @@ public class ShapesApi {
     public static ArrayList<Location> getBox(Location center, double boxSize) {
         ArrayList<Location> boxPoints = new ArrayList<Location>();
         boxPoints.add(center.clone().add(-boxSize, 0, -boxSize));
+        boxPoints.add(center.clone().add(boxSize, 0, -boxSize));
         boxPoints.add(center.clone().add(boxSize, 0, boxSize));
         boxPoints.add(center.clone().add(-boxSize, 0, boxSize));
-        boxPoints.add(center.clone().add(boxSize, 0, -boxSize));
         return boxPoints;
     }
 

@@ -3,7 +3,7 @@ package com.tenjava.entries.libraryaddict.t1;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.tenjava.entries.libraryaddict.t1.runes.TeleportRune;
+import com.tenjava.entries.libraryaddict.t1.runes.*;
 
 public class RuneApi {
     private static JavaPlugin plugin;
@@ -18,6 +18,10 @@ public class RuneApi {
 
     public static void castTeleport(Location firstTeleport, Location secondTeleport, double runeSize) {
         TeleportRune rune = new TeleportRune(firstTeleport, secondTeleport, runeSize);
+    }
+
+    public static void castTrap(Location trapLoc, double runeSize) {
+        TrapRune rune = new TrapRune(trapLoc, runeSize);
     }
 
 }

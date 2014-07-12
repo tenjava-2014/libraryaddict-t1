@@ -29,6 +29,7 @@ public class RuneMaster extends JavaPlugin implements Listener {
         Location firstTeleport = p.getLocation();
         Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
         double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
-        RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+        RuneApi.castTrap(secondTeleport, 2);
+        // RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
     }
 }
