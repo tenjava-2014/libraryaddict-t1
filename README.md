@@ -5,12 +5,10 @@ libraryaddict's ten.java submission
 
 This is a submission for the 2014 ten.java contest.
 
-- __Theme:__
+- __Theme:__ How can movement/travel be improved?
 - __Time:__ Time 1 (7/12/2014 00:00 to 7/12/2014 10:00 UTC)
 - __MC Version:__ 1.7.9 (latest Bukkit beta)
-- __Stream URL:__ None
-
-<!-- put chosen theme above -->
+- __Stream URL:__ http://www.twitch.tv/redwarfare
 
 ---------------------------------------
 
