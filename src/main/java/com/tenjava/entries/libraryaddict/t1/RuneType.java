@@ -12,17 +12,22 @@ public enum RuneType {
     DEFENSE(ChatColor.WHITE + "Defense Rune", new ItemStack(Material.IRON_CHESTPLATE),
             "Cast a spell which defends the players inside!"),
 
-    WITHER_SUMMONING(ChatColor.DARK_RED + "Witch Summoning", new ItemStack(Material.FIRE), "Cast a rune on the ground to",
-            "summon a angry wither!"),
-
     EXPLODING(ChatColor.RED + "Exploding Rune", new ItemStack(Material.FIREBALL), "Cast a rune which explodes after 5 seconds!"),
 
     HEALING(ChatColor.RED + "Healing Rune", new ItemStack(Material.POTION, 1, (short) 8197), "Cast a rune on the ground to",
             "passively heal people!"),
 
+    HIDING(ChatColor.GRAY + "Rune of Hiding", new ItemStack(Material.POTION, 1, (short) 8206), "Create a rune to hide in!"),
+
+    SPEED(ChatColor.WHITE + "Speed Rune", new ItemStack(Material.QUARTZ), "Create a rune to boost up the",
+            "speed of whatever steps inside!"),
+
     TELEPORT(ChatColor.BLUE + "Teleporter Rune", new ItemStack(Material.COMMAND), "Create two teleport portals!"),
 
-    TRAP(ChatColor.GRAY + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!");
+    TRAP(ChatColor.GRAY + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!"),
+
+    WITHER_SUMMONING(ChatColor.DARK_RED + "Witch Summoning", new ItemStack(Material.FIRE), "Cast a rune on the ground to",
+            "summon a angry wither!");
 
     public static RuneType getRune(String name) {
         for (RuneType rune : RuneType.values()) {

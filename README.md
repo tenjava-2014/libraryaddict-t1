@@ -65,3 +65,7 @@ __Teleport:__ A rune is placed at your location and the destination. After a sho
 __Trap:__ A rune is placed and hidden on the ground. Anything stepping on that rune will activate it with a explosion!
 
 __Wither Summoning:__ I got bored. This draws a pentagram on the ground, once finished. I use the blood of mbaxter to activate it.
+
+__Speed:__ Step in this to gain a speed II boost for 5 minutes!
+
+__Hiding:__ Step in here to hide from other players and monsters while the rune lasts!

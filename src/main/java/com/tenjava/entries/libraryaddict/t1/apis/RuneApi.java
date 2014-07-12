@@ -3,12 +3,7 @@ package com.tenjava.entries.libraryaddict.t1.apis;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.tenjava.entries.libraryaddict.t1.runes.DefenseRune;
-import com.tenjava.entries.libraryaddict.t1.runes.ExplodingRune;
-import com.tenjava.entries.libraryaddict.t1.runes.HealingRune;
-import com.tenjava.entries.libraryaddict.t1.runes.TeleportRune;
-import com.tenjava.entries.libraryaddict.t1.runes.TrapRune;
-import com.tenjava.entries.libraryaddict.t1.runes.WitherSummoning;
+import com.tenjava.entries.libraryaddict.t1.runes.*;
 
 public class RuneApi {
     private static JavaPlugin plugin;
@@ -25,6 +20,18 @@ public class RuneApi {
         new HealingRune(secondTeleport, i);
     }
 
+    public static void castHiding(Location secondTeleport, double i) {
+        new HidingRune(secondTeleport, i);
+    }
+
+    public static void castSpeed(Location secondTeleport, double i) {
+        new SpeedRune(secondTeleport, i);
+    }
+
+    public static void castSummoning(Location secondTeleport, double i) {
+        new WitherSummoning(secondTeleport, i);
+    }
+
     public static void castTeleport(Location firstTeleport, Location secondTeleport, double runeSize) {
         new TeleportRune(firstTeleport, secondTeleport, runeSize);
     }
@@ -39,10 +46,6 @@ public class RuneApi {
 
     public static void init(JavaPlugin p) {
         plugin = p;
-    }
-
-    public static void castSummoning(Location secondTeleport, double i) {
-        new WitherSummoning(secondTeleport, i);
     }
 
 }

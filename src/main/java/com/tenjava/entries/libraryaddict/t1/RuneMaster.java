@@ -130,8 +130,9 @@ public class RuneMaster extends JavaPlugin implements Listener {
                         if (type != null) {
                             if (charge(p, type)) {
                                 boolean cast = true;
-                                Block b = p.getTargetBlock(null, type == RuneType.TRAP || type == RuneType.DEFENSE
-                                        || type == RuneType.HEALING ? 10 : 150);
+                                Block b = p.getTargetBlock(null, type == RuneType.SPEED || type == RuneType.HIDING
+                                        || type == RuneType.TRAP || type == RuneType.DEFENSE || type == RuneType.HEALING ? 10
+                                        : 150);
                                 while (b.getType() != Material.AIR) {
                                     b = b.getRelative(BlockFace.UP);
                                 }
@@ -161,6 +162,11 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                 case DEFENSE:
                                     RuneApi.castDefense(secondTeleport);
                                     break;
+                                case SPEED:
+                                    RuneApi.castSpeed(secondTeleport, 3);
+                                    break;
+                                case HIDING:
+                                    RuneApi.castHiding(secondTeleport, 3);
                                 default:
                                     break;
                                 }

@@ -18,13 +18,8 @@ import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
 public class WitherSummoning implements Rune {
 
     private Location location;
-    private double size;
     private BukkitRunnable runnable;
-
-    @Override
-    public RuneType getType() {
-        return RuneType.WITHER_SUMMONING;
-    }
+    private double size;
 
     /**
      * Slowly draw the circle Then draw the star Then when its all drawn. Turn it RED!!!!
@@ -69,6 +64,11 @@ public class WitherSummoning implements Rune {
             }
         };
         runnable.runTaskTimer(RuneApi.getPlugin(), 0, 4);
+    }
+
+    @Override
+    public RuneType getType() {
+        return RuneType.WITHER_SUMMONING;
     }
 
 }
