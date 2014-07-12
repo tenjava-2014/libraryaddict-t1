@@ -39,16 +39,18 @@ public class HealingRune implements Rune {
                 if (ticksLived % 10 == 0) {
                     sendParticles();
                 }
-                if (ticksLived++ >= 20 * 20) {
+                if (ticksLived++ >= 7 * 20) {
                     cancel();
                 }
-                for (LivingEntity entity : location.getWorld().getEntitiesByClass(LivingEntity.class)) {
-                    if (!(entity instanceof Monster)) {
-                        Location loc = entity.getLocation();
-                        if (loc.distance(location) <= size && loc.getBlockY() >= location.getBlockY()
-                                && loc.getBlockY() <= location.getBlockY() + 2) {
-                            if (entity.getHealth() < entity.getMaxHealth()) {
-                                entity.setHealth(Math.min(entity.getHealth() + 1, entity.getMaxHealth()));
+                if (ticksLived % 20 == 0) {
+                    for (LivingEntity entity : location.getWorld().getEntitiesByClass(LivingEntity.class)) {
+                        if (!(entity instanceof Monster)) {
+                            Location loc = entity.getLocation();
+                            if (loc.distance(location) <= size && loc.getBlockY() >= location.getBlockY()
+                                    && loc.getBlockY() <= location.getBlockY() + 2) {
+                                if (entity.getHealth() < entity.getMaxHealth()) {
+                                    entity.setHealth(Math.min(entity.getHealth() + 1, entity.getMaxHealth()));
+                                }
                             }
                         }
                     }

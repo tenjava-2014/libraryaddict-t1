@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,6 +30,10 @@ public class RuneMaster extends JavaPlugin implements Listener {
             ChatColor.GOLD + "Rune selector");
 
     public void onEnable() {
+        saveDefaultConfig();
+        for (RuneType type : RuneType.values()) {
+            type.setCost(getConfig().getInt("RuneCosts." + type.name().substring(0, 1) + type.name().toLowerCase().substring(1)));
+        }
         Bukkit.getPluginManager().registerEvents(this, this);
         RuneApi.init(this);
         int i = 0;
@@ -37,6 +42,35 @@ public class RuneMaster extends JavaPlugin implements Listener {
             spellInv.setItem(i++, item);
         }
         getCommand("addwand").setExecutor(new AddWandCommand());
+    }
+
+    private boolean charge(Player player, RuneType type) {
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return true;
+        }
+        int goldIngots = 0;
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item != null && item.getType() == Material.GOLD_NUGGET) {
+                goldIngots += item.getAmount();
+            }
+        }
+        if (goldIngots < type.getCost()) {
+            return false;
+        }
+        goldIngots = type.getCost();
+        while (goldIngots > 0) {
+            int slot = player.getInventory().first(Material.GOLD_NUGGET);
+            ItemStack item = player.getInventory().getItem(slot);
+            while (item.getAmount() > 0 && goldIngots > 0) {
+                goldIngots--;
+                item.setAmount(item.getAmount() - 1);
+            }
+            if (item.getAmount() == 0) {
+                player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+            }
+        }
+        player.updateInventory();
+        return true;
     }
 
     @EventHandler
@@ -94,52 +128,61 @@ public class RuneMaster extends JavaPlugin implements Listener {
                     if (lore != null && !lore.isEmpty()) {
                         RuneType type = RuneType.getRune(lore.get(0));
                         if (type != null) {
-                            boolean cast = true;
-                            switch (type) {
-                            case TRAP:
-                            case TELEPORT:
-                            case EXPLODING:
-                            case HEALING:
-                                Block b = p.getTargetBlock(null, type == RuneType.TRAP || type == RuneType.HEALING ? 10 : 150);
-                                while (b.getType() != Material.AIR) {
-                                    b = b.getRelative(BlockFace.UP);
-                                }
-                                if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                                    p.sendMessage(ChatColor.RED + "Unable to place a rune!");
-                                    return;
-                                }
-                                Location firstTeleport = p.getLocation();
-                                Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
-                                double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
+                            if (charge(p, type)) {
+                                boolean cast = true;
                                 switch (type) {
                                 case TRAP:
-                                    RuneApi.castTrap(secondTeleport, 2);
-                                    break;
                                 case TELEPORT:
-                                    RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
-                                    break;
                                 case EXPLODING:
-                                    RuneApi.castExploding(secondTeleport, 3);
-                                    break;
                                 case HEALING:
-                                    RuneApi.castHealing(secondTeleport, 3);
+                                    Block b = p
+                                            .getTargetBlock(null, type == RuneType.TRAP || type == RuneType.HEALING ? 10 : 150);
+                                    while (b.getType() != Material.AIR) {
+                                        b = b.getRelative(BlockFace.UP);
+                                    }
+                                    if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                                        p.sendMessage(ChatColor.RED + "Unable to place a rune!");
+                                        return;
+                                    }
+                                    Location firstTeleport = p.getLocation();
+                                    Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
+                                    double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
+                                    switch (type) {
+                                    case TRAP:
+                                        RuneApi.castTrap(secondTeleport, 2);
+                                        break;
+                                    case TELEPORT:
+                                        RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+                                        break;
+                                    case EXPLODING:
+                                        RuneApi.castExploding(secondTeleport, 3);
+                                        break;
+                                    case HEALING:
+                                        RuneApi.castHealing(secondTeleport, 3);
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                    break;
+                                case DEFENSE:
+                                    RuneApi.castDefense(p.getLocation());
                                     break;
                                 default:
+                                    cast = false;
                                     break;
                                 }
-                                break;
-                            case DEFENSE:
-                                RuneApi.castDefense(p.getLocation());
-                                break;
-                            default:
-                                cast = false;
-                                break;
-                            }
-                            if (cast) {
-                                p.getWorld().playSound(p.getLocation(), Sound.ZOMBIE_REMEDY, 3, 0.8F);
+                                if (cast) {
+                                    p.getWorld().playSound(p.getLocation(), Sound.ZOMBIE_REMEDY, 3, 0.8F);
+                                }
+                                if (p.getGameMode() != GameMode.CREATIVE) {
+                                    p.sendMessage(ChatColor.DARK_AQUA + "" + type.getCost()
+                                            + " gold nuggets were subtracted in payment of the rune");
+                                }
+                            } else {
+                                p.sendMessage(ChatColor.RED + "You can't afford to cast this rune!");
                             }
                         } else {
-                            p.sendMessage(ChatColor.RED + "You don't have a spell selected!");
+                            p.sendMessage(ChatColor.RED + "You don't have a rune selected!");
                         }
                     }
                 } else {

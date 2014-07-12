@@ -1,9 +1,11 @@
 package com.tenjava.entries.libraryaddict.t1;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,11 +19,25 @@ public enum RuneType {
 
     EXPLODING(ChatColor.RED + "Exploding Rune", new ItemStack(Material.FIREBALL), "Cast a rune which explodes after 5 seconds!"),
 
-    HEALING(ChatColor.RED + "Healing Rune", new ItemStack(Material.POTION, 1, (short) 8197),
-            "Cast a rune on the ground to passively heal people!");
+    HEALING(ChatColor.RED + "Healing Rune", new ItemStack(Material.POTION, 1, (short) 8197), "Cast a rune on the ground to",
+            "passively heal people!");
 
     private String runeName;
     private ItemStack runeIcon;
+    private int cost;
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int newCost) {
+        this.cost = newCost;
+        ItemMeta meta = runeIcon.getItemMeta();
+        List<String> lore = meta.getLore();
+        lore.add(ChatColor.GOLD + "Rune cost: " + ChatColor.YELLOW + getCost());
+        meta.setLore(lore);
+        runeIcon.setItemMeta(meta);
+    }
 
     private RuneType(String runeName, ItemStack runeIcon, String... loreArray) {
         ItemMeta meta = runeIcon.getItemMeta();
