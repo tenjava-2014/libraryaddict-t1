@@ -35,6 +35,7 @@ public class ShapesApi {
     }
 
     public static ArrayList<Location> getLines(Location startingPoint, Location endingPoint, int amountOfPoints) {
+        startingPoint = startingPoint.clone();
         double x = startingPoint.getX() - endingPoint.getX();
         double y = startingPoint.getY() - endingPoint.getY();
         double z = startingPoint.getZ() - endingPoint.getZ();

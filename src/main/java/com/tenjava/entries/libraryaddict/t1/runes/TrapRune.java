@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +47,7 @@ public class TrapRune implements Rune, Listener {
     private boolean isInTrap(Location loc) {
         if (loc.getX() >= trapLocation.getX() - trapSize && loc.getX() <= trapLocation.getX() + trapSize) {
             if (loc.getZ() >= trapLocation.getZ() - trapSize && loc.getZ() <= trapLocation.getZ() + trapSize) {
-                if (loc.getY() >= trapLocation.getY() && loc.getY() <= trapLocation.getY() + 2) {
+                if (loc.getY() >= trapLocation.getY() - 0.1 && loc.getY() <= trapLocation.getY() + 0.9) {
                     return true;
                 }
             }
@@ -58,10 +59,9 @@ public class TrapRune implements Rune, Listener {
         ArrayList<Location> boxLocs = ShapesApi.getBox(trapLocation, trapSize);
         ArrayList<Location> returns = new ArrayList<Location>();
         for (int i = 0; i < boxLocs.size(); i++) {
-            returns.add(boxLocs.get(i));
             int a = i + 1 >= boxLocs.size() ? 0 : i + 1;
-            Bukkit.broadcastMessage("Goal: " + a + ", Current: " + boxLocs.get(i) + ", Next: " + boxLocs.get(a));
             returns.addAll(ShapesApi.getLines(boxLocs.get(i), boxLocs.get(a), 0.3D));
+            returns.add(boxLocs.get(i));
         }
         return returns;
     }
