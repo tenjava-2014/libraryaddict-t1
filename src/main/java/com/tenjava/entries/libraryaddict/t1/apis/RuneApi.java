@@ -1,4 +1,4 @@
-package com.tenjava.entries.libraryaddict.t1;
+package com.tenjava.entries.libraryaddict.t1.apis;
 
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -8,7 +8,7 @@ import com.tenjava.entries.libraryaddict.t1.runes.*;
 public class RuneApi {
     private static JavaPlugin plugin;
 
-    protected static void init(JavaPlugin p) {
+    public static void init(JavaPlugin p) {
         plugin = p;
     }
 

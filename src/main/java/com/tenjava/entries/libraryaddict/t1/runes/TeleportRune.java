@@ -7,10 +7,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.tenjava.entries.libraryaddict.t1.ParticleApi;
-import com.tenjava.entries.libraryaddict.t1.RuneApi;
-import com.tenjava.entries.libraryaddict.t1.ShapesApi;
-import com.tenjava.entries.libraryaddict.t1.ParticleApi.LibsParticles;
+import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
+import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
+import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
+import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 
 public class TeleportRune implements Rune {
     private Location firstLoc, secondLoc;

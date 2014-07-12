@@ -1,4 +1,4 @@
-package com.tenjava.entries.libraryaddict.t1;
+package com.tenjava.entries.libraryaddict.t1.apis;
 
 import java.util.ArrayList;
 
