@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class ParticleApi {
     public enum LibsParticles {
-        FLAME("flame"), BUBBLE("bubble"), FIREWORKS("fireworksSpark");
+        FLAME("flame"), BUBBLE("bubble"), FIREWORKS("fireworksSpark"), PORTAL("portal");
         private String name;
 
         private LibsParticles(String name) {
@@ -24,8 +24,13 @@ public class ParticleApi {
     }
 
     public static void sendPackets(LibsParticles particle, double x, double y, double z) {
-        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.name, (float) x, (float) y, (float) z, 0,
-                0, 0, 0, 1);
+        sendPackets(particle, x, y, z, 0, 0, 0, 1);
+    }
+
+    public static void sendPackets(LibsParticles particle, double x, double y, double z, double xOffset, double zOffset,
+            double yOffset, int particleNumber) {
+        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(particle.name, (float) x, (float) y, (float) z,
+                (float) xOffset, (float) yOffset, (float) zOffset, 0F, particleNumber);
         Location loc = new Location(null, x, y, z);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (loc.getWorld() == null) {

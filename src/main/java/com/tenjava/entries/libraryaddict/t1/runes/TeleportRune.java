@@ -1,6 +1,7 @@
 package com.tenjava.entries.libraryaddict.t1.runes;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
@@ -42,7 +43,11 @@ public class TeleportRune implements Rune {
                 for (LivingEntity entity : firstLoc.getWorld().getEntitiesByClass(LivingEntity.class)) {
                     Location loc = entity.getLocation();
                     if (loc.distance(firstLoc) <= runeSize && Math.abs(loc.getBlockY() - firstLoc.getBlockY()) < 2) {
-                        // TODO Magic effects to wow the peasents
+                        for (double y = 0; y < 2; y += 0.5) {
+                            ParticleApi.sendPackets(LibsParticles.PORTAL, secondLoc.getX(), secondLoc.getY() + y,
+                                    secondLoc.getZ(), 1.5, 1.5, 1.5, 10);
+                        }
+                        secondLoc.getWorld().playSound(secondLoc, Sound.ENDERMAN_TELEPORT, 3, 0);
                         entity.teleport(secondLoc);
                     }
                 }
