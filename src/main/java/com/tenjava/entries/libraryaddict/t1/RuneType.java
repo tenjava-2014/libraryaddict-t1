@@ -15,7 +15,10 @@ public enum RuneType {
     DEFENSE(ChatColor.WHITE + "Defense Rune", new ItemStack(Material.IRON_CHESTPLATE),
             "Cast a spell which defends the players inside!"),
 
-    EXPLODING(ChatColor.RED + "Exploding Rune", new ItemStack(Material.FIREBALL), "Cast a rune which explodes after 5 seconds!");
+    EXPLODING(ChatColor.RED + "Exploding Rune", new ItemStack(Material.FIREBALL), "Cast a rune which explodes after 5 seconds!"),
+
+    HEALING(ChatColor.RED + "Healing Rune", new ItemStack(Material.POTION, 1, (short) 8197),
+            "Cast a rune on the ground to passively heal people!");
 
     private String runeName;
     private ItemStack runeIcon;

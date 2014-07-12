@@ -99,7 +99,8 @@ public class RuneMaster extends JavaPlugin implements Listener {
                             case TRAP:
                             case TELEPORT:
                             case EXPLODING:
-                                Block b = p.getTargetBlock(null, type == RuneType.TRAP ? 10 : 150);
+                            case HEALING:
+                                Block b = p.getTargetBlock(null, type == RuneType.TRAP || type == RuneType.HEALING ? 10 : 150);
                                 while (b.getType() != Material.AIR) {
                                     b = b.getRelative(BlockFace.UP);
                                 }
@@ -119,6 +120,9 @@ public class RuneMaster extends JavaPlugin implements Listener {
                                     break;
                                 case EXPLODING:
                                     RuneApi.castExploding(secondTeleport, 3);
+                                    break;
+                                case HEALING:
+                                    RuneApi.castHealing(secondTeleport, 3);
                                     break;
                                 default:
                                     break;

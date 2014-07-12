@@ -32,4 +32,8 @@ public class RuneApi {
         DefenseRune rune = new DefenseRune(location, 5);
     }
 
+    public static void castHealing(Location secondTeleport, double i) {
+        HealingRune run = new HealingRune(secondTeleport, i);
+    }
+
 }
