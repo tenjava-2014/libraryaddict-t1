@@ -1,12 +1,16 @@
 package com.tenjava.entries.libraryaddict.t1.runes;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.tenjava.entries.libraryaddict.t1.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.RuneApi;
+import com.tenjava.entries.libraryaddict.t1.ShapesApi;
+import com.tenjava.entries.libraryaddict.t1.ParticleApi.LibsParticles;
 
 public class TeleportRune implements Rune {
     private Location firstLoc, secondLoc;
@@ -55,12 +59,20 @@ public class TeleportRune implements Rune {
         redrawRunes(secondLoc);
     }
 
+    private void makeCircle(Location loc, double distance) {
+        for (Location l : ShapesApi.getPointsCircle(loc, (int) Math.ceil(Math.PI * distance * 2), distance)) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                ParticleApi.sendPacket(player, LibsParticles.FIREWORKS, l.getX(), l.getY(), l.getZ());
+            }
+        }
+    }
+
     private void redrawRunes(Location runeLoc) {
         runeLoc = runeLoc.clone();
         for (double y = 0; y < 1; y += 0.4) {
             runeLoc.add(0, y, 0);
-            ParticleApi.makeCircle(runeLoc, runeSize);
-            ParticleApi.makeCircle(runeLoc, (runeSize / 3) * 2);
+            makeCircle(runeLoc, runeSize);
+            makeCircle(runeLoc, (runeSize / 3) * 2);
         }
     }
 
