@@ -130,49 +130,38 @@ public class RuneMaster extends JavaPlugin implements Listener {
                         if (type != null) {
                             if (charge(p, type)) {
                                 boolean cast = true;
+                                Block b = p.getTargetBlock(null, type == RuneType.TRAP || type == RuneType.DEFENSE
+                                        || type == RuneType.HEALING ? 10 : 150);
+                                while (b.getType() != Material.AIR) {
+                                    b = b.getRelative(BlockFace.UP);
+                                }
+                                if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                                    p.sendMessage(ChatColor.RED + "Unable to place a rune!");
+                                    return;
+                                }
+                                Location firstTeleport = p.getLocation();
+                                Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
+                                double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
                                 switch (type) {
-                                case TRAP:
-                                case TELEPORT:
-                                case EXPLODING:
-                                case HEALING:
                                 case WITHER_SUMMONING:
-                                    Block b = p
-                                            .getTargetBlock(null, type == RuneType.TRAP || type == RuneType.HEALING ? 10 : 150);
-                                    while (b.getType() != Material.AIR) {
-                                        b = b.getRelative(BlockFace.UP);
-                                    }
-                                    if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                                        p.sendMessage(ChatColor.RED + "Unable to place a rune!");
-                                        return;
-                                    }
-                                    Location firstTeleport = p.getLocation();
-                                    Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
-                                    double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
-                                    switch (type) {
-                                    case WITHER_SUMMONING:
-                                        RuneApi.castSummoning(secondTeleport, 10);
-                                        break;
-                                    case TRAP:
-                                        RuneApi.castTrap(secondTeleport, 2);
-                                        break;
-                                    case TELEPORT:
-                                        RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
-                                        break;
-                                    case EXPLODING:
-                                        RuneApi.castExploding(secondTeleport, 3);
-                                        break;
-                                    case HEALING:
-                                        RuneApi.castHealing(secondTeleport, 3);
-                                        break;
-                                    default:
-                                        break;
-                                    }
+                                    RuneApi.castSummoning(secondTeleport, 10);
+                                    break;
+                                case TRAP:
+                                    RuneApi.castTrap(secondTeleport, 2);
+                                    break;
+                                case TELEPORT:
+                                    RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+                                    break;
+                                case EXPLODING:
+                                    RuneApi.castExploding(secondTeleport, 3);
+                                    break;
+                                case HEALING:
+                                    RuneApi.castHealing(secondTeleport, 3);
                                     break;
                                 case DEFENSE:
-                                    RuneApi.castDefense(p.getLocation());
+                                    RuneApi.castDefense(secondTeleport);
                                     break;
                                 default:
-                                    cast = false;
                                     break;
                                 }
                                 if (cast) {
