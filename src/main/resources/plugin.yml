@@ -1,3 +1,6 @@
 name: libraryaddict-t1
 main: com.tenjava.entries.libraryaddict.t1.RuneMaster
 version: '${project.version}'
+commands:
+  addwand:
+    usage: /add <Player>

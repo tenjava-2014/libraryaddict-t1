@@ -1,20 +1,30 @@
 package com.tenjava.entries.libraryaddict.t1.apis;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 
-import com.tenjava.entries.libraryaddict.t1.runes.Rune;
-import com.tenjava.entries.libraryaddict.t1.runes.TrapRune;
+import com.tenjava.entries.libraryaddict.t1.runes.*;
 
 public class SpellApi {
-    private static HashMap<String, Class<? extends Rune>> spells = new HashMap<String, Class<? extends Rune>>();
+    private static HashMap<String, RuneType> spells = new HashMap<String, RuneType>();
     static {
-        spells.put(ChatColor.BLUE + "Trapcard", TrapRune.class);
-        spells.put(ChatColor.BLUE + "Teleporter", TrapRune.class);
+        for (RuneType type : RuneType.values()) {
+            spells.put(type.getName(), type);
+        }
     }
 
-    public static Class<? extends Rune> getRune(String name) {
+    public static String getName(Rune rune) {
+        for (Entry<String, RuneType> entry : spells.entrySet()) {
+            if (entry.getValue() == rune.getType()) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static RuneType getRune(String name) {
         if (spells.containsKey(name)) {
             return spells.get(name);
         }

@@ -76,4 +76,9 @@ public class TeleportRune implements Rune {
         }
     }
 
+    @Override
+    public RuneType getType() {
+        return RuneType.TELEPORT;
+    }
+
 }

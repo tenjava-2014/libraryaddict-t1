@@ -81,4 +81,9 @@ public class TrapRune implements Rune, Listener {
             }
         }
     }
+
+    @Override
+    public RuneType getType() {
+        return RuneType.TRAP;
+    }
 }
