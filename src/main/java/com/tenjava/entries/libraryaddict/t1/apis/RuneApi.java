@@ -24,4 +24,8 @@ public class RuneApi {
         TrapRune rune = new TrapRune(trapLoc, runeSize);
     }
 
+    public static void castDefense(Location location) {
+        DefenseRune rune = new DefenseRune(location, 5);
+    }
+
 }

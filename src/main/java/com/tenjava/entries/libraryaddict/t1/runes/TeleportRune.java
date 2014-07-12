@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
 import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
@@ -15,7 +16,7 @@ import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi.LibsParticles;
 public class TeleportRune implements Rune {
     private Location firstLoc, secondLoc;
     private double runeSize;
-    private int ticksLived;
+    private int ticksLived = -60;
     private int ticksToLive;
     private BukkitRunnable runnable;
 
@@ -23,7 +24,7 @@ public class TeleportRune implements Rune {
         this.firstLoc = fLoc;
         this.secondLoc = sLoc;
         this.runeSize = rSize;
-        ticksToLive = 100;
+        ticksToLive = 150;
         runnable = new BukkitRunnable() {
 
             @Override
@@ -38,17 +39,23 @@ public class TeleportRune implements Rune {
                     firstLoc.getWorld().playSound(firstLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
                     firstLoc.getWorld().playSound(secondLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
                 }
-                for (LivingEntity entity : firstLoc.getWorld().getEntitiesByClass(LivingEntity.class)) {
-                    Location loc = entity.getLocation();
-                    if (loc.distance(firstLoc) <= runeSize && Math.abs(loc.getBlockY() - firstLoc.getBlockY()) < 2) {
-                        for (double y = 0; y < 2; y += 0.5) {
-                            ParticleApi.sendPackets(LibsParticles.PORTAL, secondLoc.getX(), secondLoc.getY() + y,
-                                    secondLoc.getZ(), 1.5, 1.5, 1.5, 40);
+                if (ticksLived > 0) {
+                    for (LivingEntity entity : firstLoc.getWorld().getEntitiesByClass(LivingEntity.class)) {
+                        Location loc = entity.getLocation();
+                        if (loc.distance(firstLoc) <= runeSize && loc.getBlockY() >= firstLoc.getBlockY()
+                                && loc.getBlockY() <= firstLoc.getBlockY() + 2) {
+                            for (double y = 0; y < 2; y += 0.5) {
+                                ParticleApi.sendPackets(LibsParticles.PORTAL, secondLoc.getX(), secondLoc.getY() + y,
+                                        secondLoc.getZ(), 1.5, 1.5, 1.5, 40);
+                            }
+                            ParticleApi.sendPackets(LibsParticles.HUGE_EXPLOSION, secondLoc.getX(), secondLoc.getY() + 1,
+                                    secondLoc.getZ(), 0, 0, 0, 5);
+                            secondLoc.getWorld().playSound(secondLoc, Sound.ENDERMAN_TELEPORT, 3, 0);
+                            Location newLoc = secondLoc.clone();
+                            newLoc.setDirection(entity.getEyeLocation().getDirection());
+                            entity.setFallDistance(0F);
+                            entity.teleport(newLoc);
                         }
-                        ParticleApi.sendPackets(LibsParticles.HUGE_EXPLOSION, secondLoc.getX(), secondLoc.getY() + 1,
-                                secondLoc.getZ(), 0, 0, 0, 5);
-                        secondLoc.getWorld().playSound(secondLoc, Sound.ENDERMAN_TELEPORT, 3, 0);
-                        entity.teleport(secondLoc);
                     }
                 }
                 ticksLived++;
@@ -67,18 +74,21 @@ public class TeleportRune implements Rune {
 
     private void makeCircle(Location loc, double distance) {
         for (Location l : ShapesApi.getPointsCircle(loc, (int) Math.ceil(Math.PI * distance * 2), distance)) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                ParticleApi.sendPacket(player, LibsParticles.FIREWORKS, l.getX(), l.getY(), l.getZ());
-            }
+            ParticleApi.sendPackets(ticksLived >= 0 ? LibsParticles.FIREWORKS : LibsParticles.RED_DUST, l.getX(), l.getY(),
+                    l.getZ());
         }
     }
 
     private void redrawRunes(Location runeLoc) {
         runeLoc = runeLoc.clone();
-        for (double y = 0; y < 1; y += 0.4) {
-            runeLoc.add(0, y, 0);
+        if (ticksLived >= 0) {
+            for (double y = 0; y < 1; y += 0.4) {
+                runeLoc.add(0, y, 0);
+                makeCircle(runeLoc, runeSize);
+                makeCircle(runeLoc, (runeSize / 3) * 2);
+            }
+        } else {
             makeCircle(runeLoc, runeSize);
-            makeCircle(runeLoc, (runeSize / 3) * 2);
         }
     }
 

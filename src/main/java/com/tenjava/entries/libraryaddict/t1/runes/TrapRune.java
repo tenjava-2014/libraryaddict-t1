@@ -7,9 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.tenjava.entries.libraryaddict.t1.RuneType;
 import com.tenjava.entries.libraryaddict.t1.apis.ParticleApi;
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
 import com.tenjava.entries.libraryaddict.t1.apis.ShapesApi;
@@ -26,14 +28,19 @@ public class TrapRune implements Rune, Listener {
         this.trapSize = size;
         initialParticles();
         runnable = new BukkitRunnable() {
+            private int ticksLived;
 
             @Override
             public void run() {
+                if (ticksLived++ > 2000) {// 10min
+                    cancel();
+                    HandlerList.unregisterAll(TrapRune.this);
+                }
                 for (LivingEntity entity : trapLocation.getWorld().getEntitiesByClass(LivingEntity.class)) {
                     Location loc = entity.getLocation();
                     if (isInTrap(loc)) {
-                        // TODO Magic effects to wow the peasents
                         cancel();
+                        HandlerList.unregisterAll(TrapRune.this);
                         trapCard();
                         loc.getWorld().playSound(loc, Sound.WITHER_SHOOT, 5, 1.5F);
                         loc.getWorld().createExplosion(loc, 2F);

@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
-import com.tenjava.entries.libraryaddict.t1.runes.RuneType;
 
 public class RuneMaster extends JavaPlugin implements Listener {
 
@@ -86,45 +86,51 @@ public class RuneMaster extends JavaPlugin implements Listener {
         Player p = event.getPlayer();
         ItemStack item = p.getItemInHand();
         if (isWand(item)) {
-            if (event.getAction().name().contains("RIGHT")) {
-                List<String> lore = item.getItemMeta().getLore();
-                if (lore != null && !lore.isEmpty()) {
-                    RuneType type = RuneType.getRune(lore.get(0));
-                    if (type != null) {
-                        switch (type) {
-                        case TRAP:
-                        case TELEPORT:
-                            Block b = p.getTargetBlock(null, type == RuneType.TRAP ? 10 : 150);
-                            while (b.getType() != Material.AIR) {
-                                b = b.getRelative(BlockFace.UP);
-                            }
-                            if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                                p.sendMessage(ChatColor.RED + "Unable to place a rune!");
-                                return;
-                            }
-                            Location firstTeleport = p.getLocation();
-                            Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
-                            double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
+            if (event.getAction() != Action.PHYSICAL) {
+                event.setCancelled(true);
+                if (!p.isSneaking()) {
+                    List<String> lore = item.getItemMeta().getLore();
+                    if (lore != null && !lore.isEmpty()) {
+                        RuneType type = RuneType.getRune(lore.get(0));
+                        if (type != null) {
                             switch (type) {
                             case TRAP:
-                                RuneApi.castTrap(secondTeleport, 2);
-                                break;
                             case TELEPORT:
-                                RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+                                Block b = p.getTargetBlock(null, type == RuneType.TRAP ? 10 : 150);
+                                while (b.getType() != Material.AIR) {
+                                    b = b.getRelative(BlockFace.UP);
+                                }
+                                if (b.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                                    p.sendMessage(ChatColor.RED + "Unable to place a rune!");
+                                    return;
+                                }
+                                Location firstTeleport = p.getLocation();
+                                Location secondTeleport = b.getLocation().add(0.5, 0, 0.5);
+                                double runeSize = Math.min(5, Math.max(2, firstTeleport.distance(secondTeleport) / 10));
+                                switch (type) {
+                                case TRAP:
+                                    RuneApi.castTrap(secondTeleport, 2);
+                                    break;
+                                case TELEPORT:
+                                    RuneApi.castTeleport(firstTeleport, secondTeleport, runeSize);
+                                    break;
+                                default:
+                                    break;
+                                }
+                                break;
+                            case DEFENSE:
+                                RuneApi.castDefense(p.getLocation());
                                 break;
                             default:
                                 break;
                             }
-                            break;
-                        default:
-                            break;
+                        } else {
+                            p.sendMessage(ChatColor.RED + "You don't have a spell selected!");
                         }
-                    } else {
-                        p.sendMessage(ChatColor.RED + "You don't have a spell selected!");
                     }
+                } else {
+                    event.getPlayer().openInventory(spellInv);
                 }
-            } else if (event.getAction().name().contains("LEFT")) {
-                event.getPlayer().openInventory(spellInv);
             }
         }
     }

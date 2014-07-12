@@ -1,4 +1,4 @@
-package com.tenjava.entries.libraryaddict.t1.runes;
+package com.tenjava.entries.libraryaddict.t1;
 
 import java.util.ArrayList;
 
@@ -8,8 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public enum RuneType {
-    TELEPORT(ChatColor.BLUE + "Teleporter", new ItemStack(Material.COMMAND), "Create two teleport portals!"), TRAP(ChatColor.GRAY
-            + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!");
+    TELEPORT(ChatColor.BLUE + "Teleporter Rune", new ItemStack(Material.COMMAND), "Create two teleport portals!"), TRAP(ChatColor.GRAY
+            + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!"), DEFENSE(
+            ChatColor.WHITE + "Defense Rune", new ItemStack(Material.IRON_CHESTPLATE),
+            "Cast a spell which defends the players inside!");
 
     private String runeName;
     private ItemStack runeIcon;
