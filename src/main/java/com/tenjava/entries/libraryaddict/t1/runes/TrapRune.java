@@ -35,6 +35,7 @@ public class TrapRune implements Rune, Listener {
                         // TODO Magic effects to wow the peasents
                         cancel();
                         trapCard();
+                        loc.getWorld().playSound(loc, Sound.WITHER_SHOOT, 5, 1.5F);
                         loc.getWorld().createExplosion(loc, 2F);
                         break;
                     }

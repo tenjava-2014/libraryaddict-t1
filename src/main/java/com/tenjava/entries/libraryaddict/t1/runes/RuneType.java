@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public enum RuneType {
     TELEPORT(ChatColor.BLUE + "Teleporter", new ItemStack(Material.COMMAND), "Create two teleport portals!"), TRAP(ChatColor.GRAY
-            + "Trap card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!");
+            + "Trap Card", new ItemStack(Material.TRIPWIRE_HOOK), "Step on the rune trap for a nasty surprise!");
 
     private String runeName;
     private ItemStack runeIcon;
@@ -24,6 +24,7 @@ public enum RuneType {
         meta.setDisplayName(runeName);
         runeIcon.setItemMeta(meta);
         this.runeIcon = runeIcon;
+        this.runeName = runeName;
     }
 
     public String getName() {
@@ -32,5 +33,14 @@ public enum RuneType {
 
     public ItemStack getIcon() {
         return runeIcon;
+    }
+
+    public static RuneType getRune(String name) {
+        for (RuneType rune : RuneType.values()) {
+            if (rune.getName().equals(name)) {
+                return rune;
+            }
+        }
+        return null;
     }
 }

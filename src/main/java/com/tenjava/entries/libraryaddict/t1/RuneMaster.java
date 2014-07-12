@@ -1,5 +1,6 @@
 package com.tenjava.entries.libraryaddict.t1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -19,12 +20,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.tenjava.entries.libraryaddict.t1.apis.RuneApi;
-import com.tenjava.entries.libraryaddict.t1.apis.SpellApi;
 import com.tenjava.entries.libraryaddict.t1.runes.RuneType;
 
 public class RuneMaster extends JavaPlugin implements Listener {
 
-    private Inventory spellInv = Bukkit.createInventory(null, 54, ChatColor.GOLD + "Rune selector");
+    private Inventory spellInv = Bukkit.createInventory(null, (int) (Math.ceil((double) RuneType.values().length / 9)) * 9,
+            ChatColor.GOLD + "Rune selector");
 
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -48,13 +49,18 @@ public class RuneMaster extends JavaPlugin implements Listener {
                         Player p = (Player) event.getWhoClicked();
                         if (isWand(p.getItemInHand())) {
                             String displayName = item.getItemMeta().getDisplayName();
-                            RuneType type = SpellApi.getRune(displayName);
+                            RuneType type = RuneType.getRune(displayName);
                             if (type != null) {
                                 item = p.getItemInHand();
                                 ItemMeta meta = item.getItemMeta();
-                                meta.setDisplayName(type.getName());
+                                ArrayList<String> lore = new ArrayList<String>();
+                                lore.add(type.getName());
+                                meta.setLore(lore);
                                 item.setItemMeta(meta);
                                 p.updateInventory();
+                                p.sendMessage(ChatColor.RED + "You have selected the rune " + type.getName());
+                            } else {
+                                p.sendMessage(ChatColor.RED + "Error! Can't find the rune " + displayName);
                             }
                         } else {
                             p.sendMessage(ChatColor.RED + "You must be holding a wand!");
@@ -83,7 +89,7 @@ public class RuneMaster extends JavaPlugin implements Listener {
             if (event.getAction().name().contains("RIGHT")) {
                 List<String> lore = item.getItemMeta().getLore();
                 if (lore != null && !lore.isEmpty()) {
-                    RuneType type = SpellApi.getRune(lore.get(0));
+                    RuneType type = RuneType.getRune(lore.get(0));
                     if (type != null) {
                         switch (type) {
                         case TRAP:
@@ -113,6 +119,8 @@ public class RuneMaster extends JavaPlugin implements Listener {
                         default:
                             break;
                         }
+                    } else {
+                        p.sendMessage(ChatColor.RED + "You don't have a spell selected!");
                     }
                 }
             } else if (event.getAction().name().contains("LEFT")) {
