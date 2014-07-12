@@ -1,7 +1,6 @@
 package com.tenjava.entries.libraryaddict.t1.runes;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
@@ -29,14 +28,13 @@ public class TeleportRune implements Rune {
 
             @Override
             public void run() {
-                ticksLived++;
                 if (ticksLived >= ticksToLive) {
                     cancel();
                 }
                 if (ticksLived % 5 == 0) {
                     resendRunes();
                 }
-                if (ticksLived % 40 == 0) {
+                if (ticksLived % 40 == 0 && ticksLived < 150) {
                     firstLoc.getWorld().playSound(firstLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
                     firstLoc.getWorld().playSound(secondLoc, Sound.PORTAL, (float) runeSize * 2, 0F);
                 }
@@ -45,12 +43,15 @@ public class TeleportRune implements Rune {
                     if (loc.distance(firstLoc) <= runeSize && Math.abs(loc.getBlockY() - firstLoc.getBlockY()) < 2) {
                         for (double y = 0; y < 2; y += 0.5) {
                             ParticleApi.sendPackets(LibsParticles.PORTAL, secondLoc.getX(), secondLoc.getY() + y,
-                                    secondLoc.getZ(), 1.5, 1.5, 1.5, 10);
+                                    secondLoc.getZ(), 1.5, 1.5, 1.5, 40);
                         }
+                        ParticleApi.sendPackets(LibsParticles.HUGE_EXPLOSION, secondLoc.getX(), secondLoc.getY() + 1,
+                                secondLoc.getZ(), 0, 0, 0, 5);
                         secondLoc.getWorld().playSound(secondLoc, Sound.ENDERMAN_TELEPORT, 3, 0);
                         entity.teleport(secondLoc);
                     }
                 }
+                ticksLived++;
             }
         };
         runnable.runTaskTimer(RuneApi.getPlugin(), 0, 1);
